@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Section } from '../layout/Section';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Code, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 type Project = {
@@ -63,9 +63,9 @@ const ProjectCard = ({ project, isCenter }: { project: Project; isCenter: boolea
   const screenshot = screenshots?.[screenshotIndex];
 
   return (
-    <div className={`group relative flex h-full w-full flex-col overflow-hidden rounded-[1.5rem] border border-white/[0.08] transition duration-500 hover:border-violet-300/25 ${isCenter ? 'bg-[#10111a] shadow-[0_24px_70px_rgba(0,0,0,0.28)]' : 'bg-[#10111a]'}`}>
+    <div className={`projects-showcase-preview group relative flex h-full w-full flex-col overflow-hidden rounded-[1.5rem] border border-white/[0.08] transition duration-500 hover:border-violet-300/25 ${isCenter ? 'bg-[#10111a] shadow-[0_24px_70px_rgba(0,0,0,0.28)]' : 'bg-[#10111a]'}`}>
       {/* Project Image */}
-      <div className="relative h-48 shrink-0 overflow-hidden border-b border-white/[0.06] bg-[#171925] md:h-56">
+      <div className="projects-showcase-image relative h-48 shrink-0 overflow-hidden border-b border-white/[0.06] bg-[#171925] md:h-56">
           {screenshot ? (
             <>
               <img
@@ -126,7 +126,7 @@ const ProjectCard = ({ project, isCenter }: { project: Project; isCenter: boolea
         </div>
         
         {/* Project Content */}
-        <div className="relative z-20 flex flex-1 flex-col p-6 md:p-7">
+        <div className="projects-showcase-content relative z-20 flex flex-1 flex-col p-6 md:p-7">
           <h3 className="mb-3 text-lg font-semibold leading-snug text-white transition-colors group-hover:text-violet-200 md:text-xl">
             {project.title}
           </h3>
@@ -134,7 +134,7 @@ const ProjectCard = ({ project, isCenter }: { project: Project; isCenter: boolea
             {project.description}
           </p>
           
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="projects-showcase-tags flex flex-wrap gap-2 mb-6">
             {project.tags.map((tag: string, idx: number) => (
               <span
                 key={idx}
@@ -149,7 +149,7 @@ const ProjectCard = ({ project, isCenter }: { project: Project; isCenter: boolea
             {project.link && (
               <a
                 href={project.link}
-                className="flex items-center gap-1.5 text-sm font-semibold text-white transition-colors hover:text-violet-200"
+                className="projects-action-link projects-action-primary flex items-center gap-1.5 text-sm font-semibold text-white transition-colors hover:text-violet-200"
               >
                 <ArrowUpRight className="w-4 h-4" />
                 Live Demo
@@ -160,7 +160,7 @@ const ProjectCard = ({ project, isCenter }: { project: Project; isCenter: boolea
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm font-semibold text-slate-400 transition-colors hover:text-white"
+                className="projects-action-link projects-action-secondary flex items-center gap-1.5 text-sm font-semibold text-slate-400 transition-colors hover:text-white"
               >
                 <Code className="w-4 h-4" />
                 Source Code
@@ -173,54 +173,13 @@ const ProjectCard = ({ project, isCenter }: { project: Project; isCenter: boolea
 };
 
 export const Projects = () => {
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [slidesToShow, setSlidesToShow] = useState(1);
-
-  const slideCount = Math.max(1, projects.length - slidesToShow + 1);
-  const lastSlide = slideCount - 1;
-
-  useEffect(() => {
-    const desktopQuery = window.matchMedia('(min-width: 768px)');
-    const updateSlidesToShow = () => {
-      setSlidesToShow(desktopQuery.matches ? 2 : 1);
-    };
-
-    updateSlidesToShow();
-    desktopQuery.addEventListener('change', updateSlidesToShow);
-    return () => desktopQuery.removeEventListener('change', updateSlidesToShow);
-  }, []);
-
-  useEffect(() => {
-    const nextSlide = Math.min(currentSlide, lastSlide);
-    if (nextSlide !== currentSlide) setCurrentSlide(nextSlide);
-  }, [currentSlide, lastSlide]);
+  const prefersReducedMotion = useReducedMotion();
+  const lastSlide = projects.length - 1;
 
   const scrollToSlide = (slideIndex: number) => {
     const nextSlide = Math.max(0, Math.min(slideIndex, lastSlide));
-    const slider = sliderRef.current;
-    const project = projectRefs.current[nextSlide];
-
     setCurrentSlide(nextSlide);
-    if (slider && project) {
-      slider.scrollTo({
-        left: slider.scrollLeft + project.getBoundingClientRect().left - slider.getBoundingClientRect().left,
-        behavior: 'smooth',
-      });
-    }
-  };
-
-  const handleSliderScroll = () => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-
-    const sliderLeft = slider.getBoundingClientRect().left;
-    const nearestProjectIndex = projectRefs.current.findIndex((project) => {
-      return project !== null && project.getBoundingClientRect().left >= sliderLeft - 2;
-    });
-    const nextSlide = Math.min(Math.max(nearestProjectIndex, 0), lastSlide);
-    setCurrentSlide((previousSlide) => previousSlide === nextSlide ? previousSlide : nextSlide);
   };
 
   const handleSliderKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -244,76 +203,99 @@ export const Projects = () => {
   return (
     <Section
       id="projects"
-      title="Projects"
+      title="Featured Work"
       subtitle="Selected projects showcasing expertise in complex ML architectures and scalable deployments."
     >
-      <div className="mt-10">
-        <div className="mb-5 flex items-center justify-end gap-2">
-          <button
-            type="button"
-            onClick={() => scrollToSlide(currentSlide - 1)}
-            disabled={currentSlide === 0}
-            aria-label="Previous projects"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-200 transition duration-200 hover:border-blue-300/30 hover:bg-blue-400/10 disabled:cursor-not-allowed disabled:opacity-35"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollToSlide(currentSlide + 1)}
-            disabled={currentSlide === lastSlide}
-            aria-label="Next projects"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-200 transition duration-200 hover:border-blue-300/30 hover:bg-blue-400/10 disabled:cursor-not-allowed disabled:opacity-35"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
-
-        <div
-          ref={sliderRef}
-          role="region"
-          aria-label="Project carousel"
-          aria-roledescription="carousel"
-          tabIndex={0}
-          onScroll={handleSliderScroll}
-          onKeyDown={handleSliderKeyDown}
-          className="hide-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth rounded-[1.6rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60"
-        >
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              ref={(element) => {
-                projectRefs.current[index] = element;
-              }}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${index + 1} of ${projects.length}: ${project.title}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.45, delay: index * 0.08 }}
-              className="min-w-0 basis-full shrink-0 snap-start md:basis-[calc(50%-0.625rem)]"
-            >
-              <ProjectCard project={project} isCenter />
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="mt-6 flex items-center justify-center gap-2" role="group" aria-label="Choose a project slide">
-          {Array.from({ length: slideCount }, (_, index) => (
+      <div className="projects-showcase">
+        <div className="projects-showcase-toolbar">
+          <span className="projects-showcase-count">
+            {String(currentSlide + 1).padStart(2, '0')}
+            <span> / {String(projects.length).padStart(2, '0')}</span>
+          </span>
+          <div className="projects-showcase-arrows">
             <button
-              key={index}
               type="button"
-              onClick={() => scrollToSlide(index)}
-              aria-label={`Go to project slide ${index + 1}`}
-              aria-current={currentSlide === index ? 'true' : undefined}
-              className={`h-2.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#080a0e] ${
-                currentSlide === index
-                  ? 'w-8 bg-blue-400'
-                  : 'w-2.5 bg-slate-500/60 hover:bg-blue-300/70'
-              }`}
-            />
-          ))}
+              onClick={() => scrollToSlide(currentSlide - 1)}
+              disabled={currentSlide === 0}
+              aria-label="Previous projects"
+              className="projects-carousel-control"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSlide(currentSlide + 1)}
+              disabled={currentSlide === lastSlide}
+              aria-label="Next projects"
+              className="projects-carousel-control"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+
+        <div className="projects-showcase-layout">
+          <div
+            className="projects-showcase-active"
+            role="region"
+            aria-label="Active project preview"
+            aria-live="polite"
+            onKeyDown={handleSliderKeyDown}
+            tabIndex={0}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={projects[currentSlide].title}
+                className="projects-showcase-transition"
+                initial={prefersReducedMotion ? false : { opacity: 0, x: 18 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={prefersReducedMotion ? undefined : { opacity: 0, x: -18 }}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.28, ease: 'easeOut' }}
+              >
+                <span className="projects-showcase-watermark" aria-hidden="true">
+                  {String(currentSlide + 1).padStart(2, '0')}
+                </span>
+                <ProjectCard project={projects[currentSlide]} isCenter />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <nav className="projects-showcase-list" aria-label="Choose a project">
+            <span className="projects-showcase-list-label">EXPLORE PROJECTS</span>
+            {projects.map((project, index) => (
+              <motion.button
+                key={project.title}
+                type="button"
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.32, delay: prefersReducedMotion ? 0 : index * 0.07 }}
+                onClick={() => scrollToSlide(index)}
+                onMouseEnter={() => setCurrentSlide(index)}
+                aria-current={currentSlide === index ? 'true' : undefined}
+                aria-label={`Show project ${String(index + 1).padStart(2, '0')}: ${project.title}`}
+                className="projects-showcase-item"
+              >
+                <span className="projects-showcase-item-number">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="projects-showcase-item-title">{project.title}</span>
+                <ArrowUpRight className="projects-showcase-item-arrow" aria-hidden="true" />
+              </motion.button>
+            ))}
+            <div className="projects-showcase-pagination" role="group" aria-label="Choose a project slide">
+              {projects.map((project, index) => (
+                <button
+                  key={project.title}
+                  type="button"
+                  onClick={() => scrollToSlide(index)}
+                  aria-label={`Go to project slide ${index + 1}`}
+                  aria-current={currentSlide === index ? 'true' : undefined}
+                  className={`projects-pagination-dot${currentSlide === index ? ' projects-pagination-active' : ''}`}
+                />
+              ))}
+            </div>
+          </nav>
         </div>
       </div>
     </Section>

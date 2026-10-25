@@ -4,7 +4,7 @@ import { Footer } from './components/layout/Footer';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Skills } from './components/sections/Skills';
-import { InfiniteSkills } from './components/sections/InfiniteSkills';
+import { SkillsHighlights } from './components/sections/SkillsHighlights';
 import { Projects } from './components/sections/Projects';
 import { Experience } from './components/sections/Experience';
 import { Certificates } from './components/sections/Certificates';
@@ -19,9 +19,9 @@ function App() {
       <main>
         <Hero />
         <About />
-        <InfiniteSkills />
-        <Skills />
+        <SkillsHighlights />
         <Projects />
+        <Skills />
         <Experience />
         <Certificates />
         <Contact />

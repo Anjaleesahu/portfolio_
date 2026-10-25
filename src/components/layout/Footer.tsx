@@ -1,78 +1,115 @@
-import { Terminal, Code, Briefcase, Mail } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Terminal, Code, Briefcase, Mail, Heart } from 'lucide-react';
+
+const navigationLinks = [
+  { label: 'About', href: '#about' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Commit History', href: '#experience' },
+  { label: 'Certificates', href: '#certificates' },
+  { label: 'Contact', href: '#contact' },
+];
+
+const legalLinks = ['Privacy Policy', 'Terms of Service', 'Cookie Policy'];
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
+  const prefersReducedMotion = useReducedMotion();
+
   const socialLinks = [
-    { icon: <Code className="w-4 h-4 transition-colors duration-300" />, href: 'https://github.com/Anjaleesahu', label: 'GitHub', hoverClass: 'hover:bg-[#333] hover:border-[#333]' },
-    { icon: <Briefcase className="w-4 h-4 transition-colors duration-300" />, href: 'https://www.linkedin.com/in/anjalee-sahu-365b39334/', label: 'LinkedIn', hoverClass: 'hover:bg-[#0077b5] hover:border-[#0077b5]' },
-    { icon: <Mail className="w-4 h-4 transition-colors duration-300" />, href: 'mailto:anjaleesahu25@gmail.com', label: 'Email', hoverClass: 'hover:bg-[#dd4b39] hover:border-[#dd4b39]' },
+    {
+      icon: <Code className="h-4 w-4" />,
+      href: 'https://github.com/Anjaleesahu',
+      label: 'GitHub',
+    },
+    {
+      icon: <Briefcase className="h-4 w-4" />,
+      href: 'https://www.linkedin.com/in/anjalee-sahu-365b39334/',
+      label: 'LinkedIn',
+    },
+    {
+      icon: <Mail className="h-4 w-4" />,
+      href: 'mailto:anjaleesahu25@gmail.com',
+      label: 'Email',
+    },
   ];
 
+  const tileReveal = {
+    initial: prefersReducedMotion ? false : { opacity: 0, y: 16 },
+    whileInView: prefersReducedMotion ? undefined : { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.15 },
+    transition: { duration: 0.45, ease: 'easeOut' as const },
+  };
+
   return (
-    <footer className="relative border-t border-white/10 bg-[#0a0a0a] pt-8 pb-4 overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-blue-500/5 to-transparent blur-[100px] pointer-events-none" />
-      
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="md:col-span-2">
-            <a href="#" className="flex items-center gap-2 mb-3 group inline-flex">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <Terminal className="text-white w-4 h-4" />
-              </div>
-              <span className="font-bold text-lg tracking-tight">Anjalee Sahu</span>
+    <footer className="site-footer">
+      <div className="site-footer-inner">
+        <div className="site-footer-grid">
+          <motion.section className="footer-tile footer-brand-tile" {...tileReveal}>
+            <a href="#" className="footer-brand" aria-label="Anjalee Sahu, back to top">
+              <span className="footer-brand-mark" aria-hidden="true">
+                <Terminal className="h-5 w-5" />
+              </span>
+              <span>Anjalee Sahu</span>
             </a>
-            <div className="flex items-center gap-2.5">
-              {socialLinks.map((link, index) => (
+            <div className="footer-socials" aria-label="Social links">
+              {socialLinks.map((link) => (
                 <a
-                  key={index}
+                  key={link.label}
                   href={link.href}
                   aria-label={link.label}
-                  className={`w-9 h-9 rounded-full glass flex items-center justify-center text-gray-400 hover:text-white border border-white/10 transition-all duration-300 ${link.hoverClass}`}
+                  className="footer-social-link"
                 >
                   {link.icon}
                 </a>
               ))}
             </div>
-          </div>
-          
-          <div>
-            <h3 className="font-semibold text-white text-xs uppercase tracking-wider mb-3">Navigation</h3>
-            <ul className="flex flex-col gap-2">
-              {['About', 'Skills', 'Projects', 'Experience', 'Certificates', 'Contact'].map((item) => (
+          </motion.section>
+
+          <motion.nav
+            className="footer-tile footer-navigation-tile"
+            aria-label="Footer navigation"
+            {...tileReveal}
+          >
+            <h2 className="footer-tile-title">Navigation</h2>
+            <ul className="footer-navigation-list">
+              {navigationLinks.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href} className="footer-text-link">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.nav>
+
+          <motion.nav
+            className="footer-tile footer-legal-tile"
+            aria-label="Legal"
+            {...tileReveal}
+          >
+            <h2 className="footer-tile-title">Legal</h2>
+            <ul className="footer-legal-list">
+              {legalLinks.map((item) => (
                 <li key={item}>
-                  <a href={`#${item.toLowerCase()}`} className="text-gray-400 hover:text-white transition-colors text-xs">
+                  <a href="#" className="footer-text-link">
                     {item}
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-semibold text-white text-xs uppercase tracking-wider mb-3">Legal</h3>
-            <ul className="flex flex-col gap-2">
-              {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors text-xs">
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        
-        <div className="border-t border-white/10 pt-4 flex flex-col md:flex-row items-center justify-between gap-2">
-          <p className="text-gray-500 text-xs">
-            © {currentYear} AI Engineer Portfolio. All rights reserved.
-          </p>
-          <div className="flex items-center gap-1.5 text-xs text-gray-500">
-            <span>Designed with</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse-glow" />
-            <span>by an AI</span>
-          </div>
+          </motion.nav>
+
+          <motion.div className="footer-tile footer-meta-tile" {...tileReveal}>
+            <p className="footer-copyright">
+              © {currentYear} AI Engineer Portfolio. All rights reserved.
+            </p>
+            <p className="footer-credit">
+              <span>Built with</span>
+              <Heart className="footer-heart" aria-hidden="true" />
+              <span>using code</span>
+            </p>
+          </motion.div>
         </div>
       </div>
     </footer>

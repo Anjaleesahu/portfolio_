@@ -42,9 +42,9 @@ export const Hero = () => {
           </div>
 
           <h1 className="mx-auto max-w-5xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-white sm:text-6xl md:text-7xl xl:text-[5.5rem] lg:mx-0">
-            Building the
+            Code Meets
             <span className="mt-2 block bg-gradient-to-r from-blue-300 via-blue-200 to-sky-300 bg-clip-text text-transparent">
-              Intelligent Future
+              Intelligence Future
             </span>
           </h1>
           <p className="mx-auto mt-7 max-w-2xl text-base leading-8 text-slate-400 sm:text-lg lg:mx-0">
@@ -92,27 +92,27 @@ export const Hero = () => {
           className="relative mx-auto w-full max-w-[420px] lg:mr-2"
         >
           <div className="hero-photo-glow pointer-events-none absolute -inset-6 rounded-[2.5rem] blur-3xl" />
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#10111a] p-2.5 shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-slate-900">
+          <div className="relative overflow-hidden rounded-[2rem] bg-[#0c1318] shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
+            <div className="relative aspect-[4/5] overflow-hidden bg-[#0c1318]">
               <img
-                src="/port_img.png"
+                src="/me.png"
                 alt="Anjalee Sahu - Profile Photo"
                 className="h-full w-full object-cover object-center"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#080b11]/70 via-transparent to-transparent" />
             </div>
           </div>
-          <div className="absolute -bottom-5 left-4 z-10 flex flex-col gap-3 rounded-2xl border border-white/10 bg-[#10141b]/95 p-4 shadow-2xl backdrop-blur-xl sm:-left-6 sm:p-5">
-            <div className="flex items-center gap-2.5 text-sm font-medium text-slate-200">
-              <Code2 className="h-4 w-4 text-blue-300" />
+          <div className="hero-skill-pills" role="group" aria-label="Areas of expertise">
+            <div className="hero-skill-pill">
+              <Code2 className="h-4 w-4" />
               Python Development
             </div>
-            <div className="flex items-center gap-2.5 text-sm font-medium text-slate-200">
-              <Layers className="h-4 w-4 text-blue-300" />
+            <div className="hero-skill-pill">
+              <Layers className="h-4 w-4" />
               Full-Stack Development
             </div>
-            <div className="flex items-center gap-2.5 text-sm font-medium text-slate-200">
-              <Brain className="h-4 w-4 text-blue-300" />
+            <div className="hero-skill-pill">
+              <Brain className="h-4 w-4" />
               AI/ML
             </div>
           </div>

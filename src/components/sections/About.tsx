@@ -1,7 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Section } from '../layout/Section';
 import { motion, useInView } from 'framer-motion';
-import { GraduationCap, Briefcase, Code2, FolderGit2, Calendar } from 'lucide-react';
+import {
+  BrainCircuit,
+  Briefcase,
+  Calendar,
+  Code2,
+  Cpu,
+  FileText,
+  FolderGit2,
+  GraduationCap,
+  Layers3,
+  Waves,
+} from 'lucide-react';
 
 const AnimatedCounter = ({ to, duration = 2 }: { to: number; duration?: number }) => {
   const [count, setCount] = useState(0);
@@ -34,102 +45,141 @@ export const About = () => {
   return (
     <Section
       id="about"
-      title="About Me"
+      title="Hello, World!"
       subtitle="Computer Science student building practical solutions with Python, full-stack development, and AI/ML."
     >
-      <div className="mt-12 flex flex-col gap-12 md:gap-20">
-        <div className="w-full">
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="flex w-full flex-col gap-8"
-          >
-            <div className="space-y-4">
-              <h3 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight">
-                Building Practical Solutions with Code and AI
-              </h3>
-              <div className="h-1 w-20 rounded-full bg-gradient-to-r from-blue-400 to-violet-400" />
-            </div>
-            
-            <div className="max-w-prose space-y-5 text-base leading-8 text-slate-400 sm:text-lg">
-              <p>
-                I’m Anjalee Sahu, a final-year Computer Science student with hands-on experience in Python, full-stack development, AI/ML, and IoT. My projects include an IoT-based water quality monitor and an AI-powered medical report analyzer, where I’ve enjoyed turning ideas into useful, practical applications.
-              </p>
-              <p>
-                After completing an Artificial Intelligence internship at Persevex, I’m eager to keep learning and take on new challenges. I’m passionate about exploring emerging technologies and building thoughtful, innovative solutions that can make a real difference.
-              </p>
-            </div>
-
-            {/* Information Cards (Education & Internship) */}
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div className="relative group/card h-full">
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/15 to-transparent opacity-0 blur-md transition-opacity duration-500 group-hover/card:opacity-100" />
-                <div className="relative h-full rounded-2xl border border-white/[0.07] bg-[#10111a] p-6 transition duration-300 hover:-translate-y-1 hover:border-blue-300/20">
-                  <GraduationCap className="w-8 h-8 text-blue-400 mb-4" />
-                  <h4 className="font-bold text-white mb-1">Education</h4>
-                  <p className="text-sm text-gray-400">B.Tech Computer Science</p>
-                  <p className="text-xs text-gray-500 mt-2">Malwa Institute of Technology (2023 - 2027)</p>
-                </div>
-              </div>
-
-              <div className="relative group/card h-full">
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-500/15 to-transparent opacity-0 blur-md transition-opacity duration-500 group-hover/card:opacity-100" />
-                <div className="relative h-full rounded-2xl border border-white/[0.07] bg-[#10111a] p-6 transition duration-300 hover:-translate-y-1 hover:border-violet-300/20">
-                  <Briefcase className="w-8 h-8 text-purple-400 mb-4" />
-                  <h4 className="font-bold text-white mb-1">Internship</h4>
-                  <p className="text-sm text-gray-400">AI Intern at Persevex</p>
-                  <p className="text-xs text-gray-500 mt-2">Artificial Intelligence</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Bottom Section: Quick Stats */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+      <div className="about-layout">
+        <motion.article
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4"
+          transition={{ duration: 0.55 }}
+          className="about-story-panel"
         >
-          {/* Stat 1 */}
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/[0.07] bg-[#10111a] p-5 text-center transition-colors hover:border-violet-300/20 md:p-6">
-            <FolderGit2 className="mb-3 h-6 w-6 text-blue-300" />
-            <div className="text-3xl font-bold text-white mb-1">
-              <AnimatedCounter to={3} />+
-            </div>
-            <div className="text-sm font-medium text-slate-500">Projects</div>
+          <span className="about-panel-label">WHAT I DO</span>
+          <h3>
+            Solving <span>Real Problems</span> with <span>Technology</span>
+          </h3>
+          <div className="about-story-accent" />
+          <div className="about-story-copy">
+            <p>
+              I’m Anjalee Sahu, a final-year Computer Science student with hands-on experience in Python, full-stack development, AI/ML, and IoT. My projects include an IoT-based water quality monitor and an AI-powered medical report analyzer, where I’ve enjoyed turning ideas into useful, practical applications.
+            </p>
+            <p>
+              After completing an Artificial Intelligence internship at Persevex, I’m eager to keep learning and take on new challenges. I’m passionate about exploring emerging technologies and building thoughtful, innovative solutions that can make a real difference.
+            </p>
           </div>
 
-          {/* Stat 2 */}
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/[0.07] bg-[#10111a] p-5 text-center transition-colors hover:border-violet-300/20 md:p-6">
-            <Briefcase className="mb-3 h-6 w-6 text-violet-300" />
-            <div className="text-3xl font-bold text-white mb-1">
-              <AnimatedCounter to={1} />
-            </div>
-            <div className="text-sm font-medium text-slate-500">Internship</div>
+          <div className="about-domain-list" aria-label="Areas of focus">
+            <div className="about-domain-chip"><Code2 aria-hidden="true" /><span>Python</span></div>
+            <div className="about-domain-chip"><Layers3 aria-hidden="true" /><span>Full-Stack</span></div>
+            <div className="about-domain-chip"><BrainCircuit aria-hidden="true" /><span>AI/ML</span></div>
+            <div className="about-domain-chip"><Cpu aria-hidden="true" /><span>IoT</span></div>
           </div>
+        </motion.article>
 
-          {/* Stat 3 */}
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/[0.07] bg-[#10111a] p-5 text-center transition-colors hover:border-violet-300/20 md:p-6">
-            <Calendar className="mb-3 h-6 w-6 text-blue-300" />
-            <div className="text-3xl font-bold text-white mb-1">
-              <AnimatedCounter to={2027} duration={1} />
+        <motion.section
+          className="about-profile-projects"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, delay: 0.08 }}
+          aria-label="Profile and projects"
+        >
+          <div className="about-profile-card">
+            <span className="about-panel-label">PROFILE</span>
+            <h3>Anjalee Sahu</h3>
+            <p>Final-year Computer Science student</p>
+            <div className="about-profile-internship">
+              <Briefcase aria-hidden="true" />
+              <span><small>Internship</small>AI Intern at Persevex</span>
             </div>
-            <div className="text-sm font-medium text-slate-500">Graduation</div>
           </div>
-
-          {/* Stat 4 */}
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/[0.07] bg-[#10111a] p-5 text-center transition-colors hover:border-violet-300/20 md:p-6">
-            <Code2 className="mb-3 h-6 w-6 text-violet-300" />
-            <div className="text-2xl font-bold text-white mb-1 mt-1">Python</div>
-            <div className="text-sm font-medium text-slate-500">Primary Language</div>
+          <div className="about-project-showcase">
+            <div className="about-projects-heading">
+              <span className="about-panel-label">SELECTED PROJECTS</span>
+              <span className="about-projects-rule" />
+            </div>
+            <article className="about-project-card">
+              <span className="about-project-icon"><Waves aria-hidden="true" /></span>
+              <div>
+                <span className="about-project-type">IoT PROJECT</span>
+                <h4>IoT-based water quality monitor</h4>
+              </div>
+            </article>
+            <article className="about-project-card">
+              <span className="about-project-icon about-project-icon-ai"><FileText aria-hidden="true" /></span>
+              <div>
+                <span className="about-project-type">AI/ML PROJECT</span>
+                <h4>AI-powered medical report analyzer</h4>
+              </div>
+            </article>
           </div>
-        </motion.div>
+        </motion.section>
       </div>
+
+      <div className="about-highlights">
+        <motion.article
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45 }}
+          className="about-highlight about-education"
+        >
+          <div className="about-highlight-topline">
+            <span className="about-panel-label">EDUCATION</span>
+            <GraduationCap aria-hidden="true" />
+          </div>
+          <h4>Education</h4>
+          <p>B.Tech Computer Science</p>
+          <span className="about-highlight-detail">Malwa Institute of Technology (2023 - 2027)</span>
+        </motion.article>
+
+        <motion.article
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45, delay: 0.08 }}
+          className="about-highlight about-internship"
+        >
+          <div className="about-highlight-topline">
+            <span className="about-panel-label">EXPERIENCE</span>
+            <Briefcase aria-hidden="true" />
+          </div>
+          <h4>Internship</h4>
+          <p>AI Intern at Persevex</p>
+          <span className="about-highlight-detail">Artificial Intelligence</span>
+        </motion.article>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 22 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.12 }}
+        className="about-stats"
+      >
+        <div className="about-stat">
+          <FolderGit2 aria-hidden="true" />
+          <div className="about-stat-value"><AnimatedCounter to={3} />+</div>
+          <div className="about-stat-label">Projects</div>
+        </div>
+        <div className="about-stat">
+          <Briefcase aria-hidden="true" />
+          <div className="about-stat-value"><AnimatedCounter to={1} /></div>
+          <div className="about-stat-label">Internship</div>
+        </div>
+        <div className="about-stat">
+          <Calendar aria-hidden="true" />
+          <div className="about-stat-value"><AnimatedCounter to={2027} duration={1} /></div>
+          <div className="about-stat-label">Graduation</div>
+        </div>
+        <div className="about-stat">
+          <Code2 aria-hidden="true" />
+          <div className="about-stat-value about-stat-language">Python</div>
+          <div className="about-stat-label">Primary Language</div>
+        </div>
+      </motion.div>
     </Section>
   );
 };

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Section } from '../layout/Section';
-import { motion, type Variants } from 'framer-motion';
-import { BrainCircuit, Database, Code2, Cpu, Network, LineChart } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion, type Variants } from 'framer-motion';
+import { BrainCircuit, Database, Code2, Cpu, Network, LineChart, Sparkles } from 'lucide-react';
 
 const skills = [
   {
@@ -60,78 +60,96 @@ const skills = [
   },
 ];
 
-const containerVariants: Variants = {
+const categoryVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.055,
     },
   },
 };
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+const skillVariants: Variants = {
+  hidden: { opacity: 0, x: -12 },
   visible: {
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.5 },
+    x: 0,
+    transition: { duration: 0.32 },
   },
 };
 
 export const Skills = () => {
+  const [activeCategory, setActiveCategory] = useState('All');
+  const prefersReducedMotion = useReducedMotion();
+  const categories = ['All', ...skills.map(({ category }) => category)];
+  const visibleSkills = activeCategory === 'All'
+    ? skills
+    : skills.filter(({ category }) => category === activeCategory);
+
   return (
     <Section
       id="skills"
-      title="Technical Arsenal"
+      title="Under the Hood"
       subtitle="A comprehensive toolkit for building state-of-the-art AI systems."
     >
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-50px' }}
-        className="mt-12 grid auto-rows-fr gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3"
-      >
-        {skills.map((skill, index) => (
+      <div className="skills-atlas">
+        <div className="skills-category-tabs" role="tablist" aria-label="Filter skills by category">
+          {categories.map((category) => (
+            <button
+              key={category}
+              type="button"
+              role="tab"
+              aria-selected={activeCategory === category}
+              className={`skills-category-tab${activeCategory === category ? ' is-active' : ''}`}
+              onClick={() => setActiveCategory(category)}
+            >
+              {category === 'All' && <Sparkles aria-hidden="true" />}
+              <span>{category}</span>
+            </button>
+          ))}
+        </div>
+
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
-            key={index}
-            variants={itemVariants}
-            className="group relative h-full overflow-hidden rounded-[1.5rem] border border-white/[0.07] bg-[#10111a] p-6 transition duration-500 hover:-translate-y-1 hover:border-violet-300/20 hover:bg-[#131521] md:p-7"
+            key={activeCategory}
+            className="skills-category-list"
+            variants={prefersReducedMotion ? undefined : categoryVariants}
+            initial={prefersReducedMotion ? false : 'hidden'}
+            animate={prefersReducedMotion ? undefined : 'visible'}
+            exit={prefersReducedMotion ? undefined : { opacity: 0, y: -8 }}
+            transition={{ duration: 0.22 }}
+            role="tabpanel"
           >
-            <div className={`pointer-events-none absolute -right-24 -top-24 z-0 h-56 w-56 rounded-full opacity-70 blur-[85px] transition duration-700 group-hover:opacity-100 ${skill.bgGlow}`} />
-            
-            {/* Optional Image Background */}
-            {skill.imageBg && (
-              <div 
-                className="pointer-events-none absolute inset-0 z-0 opacity-[0.08] mix-blend-screen transition-transform duration-700 group-hover:scale-105"
-                style={{
-                  backgroundImage: `url(${skill.imageBg})`,
-                  backgroundSize: skill.imageFit || 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                }}
-              />
-            )}
-            
-            <div className="relative z-10">
-              <div className={`mb-6 inline-flex items-center justify-center rounded-xl border p-3 ${skill.iconBg}`}>
-                {skill.icon}
-              </div>
-              <h3 className="mb-4 text-xl font-semibold tracking-tight text-white">{skill.category}</h3>
-              <div className="flex flex-wrap gap-2">
-                {skill.items.map((item, idx) => (
-                  <span
-                    key={idx}
-                    className="cursor-default rounded-lg border border-white/[0.06] bg-white/[0.035] px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:border-violet-300/20 hover:bg-violet-300/[0.08] hover:text-white"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
+            {visibleSkills.map((skill) => (
+              <motion.article
+                key={skill.category}
+                className="skills-category-row"
+                variants={prefersReducedMotion ? undefined : skillVariants}
+              >
+                <div className="skills-category-heading">
+                  <span className="skills-category-icon">{skill.icon}</span>
+                  <div>
+                    <h3>{skill.category}</h3>
+                    <span className="skills-category-rule" />
+                  </div>
+                </div>
+                <div className="skills-entry-list">
+                  {skill.items.map((item) => (
+                    <motion.div
+                      key={item}
+                      className="skills-entry"
+                      variants={prefersReducedMotion ? undefined : skillVariants}
+                    >
+                      <span className="skills-entry-icon">{skill.icon}</span>
+                      <span>{item}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.article>
+            ))}
           </motion.div>
-        ))}
-      </motion.div>
+        </AnimatePresence>
+      </div>
     </Section>
   );
 };

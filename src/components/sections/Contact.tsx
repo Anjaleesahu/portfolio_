@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Section } from '../layout/Section';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Terminal, Loader2 } from 'lucide-react';
+import { ArrowUpRight, Mail, MapPin, Send, Loader2 } from 'lucide-react';
 
 interface FormState {
   name: string;
@@ -155,7 +155,7 @@ export const Contact = () => {
   };
 
   return (
-    <Section id="contact" className="pb-32">
+    <Section id="contact" className="contact-section pb-32">
       {/* Toast Notification Container */}
       <AnimatePresence>
         {toast && (
@@ -184,44 +184,60 @@ export const Contact = () => {
         )}
       </AnimatePresence>
 
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/[0.08] bg-[#10111a] shadow-[0_30px_100px_rgba(0,0,0,0.28)]">
-        <div className="pointer-events-none absolute -right-28 -top-40 h-[28rem] w-[28rem] rounded-full bg-violet-500/[0.08] blur-[110px]" />
-        
-        <div className="relative z-10 p-6 sm:p-9 md:p-12 lg:p-16">
-          <div className="grid gap-12 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
-            
-            <div>
-              <div className="mb-7 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-violet-300/15 bg-violet-300/[0.08]">
-                <Terminal className="h-6 w-6 text-violet-200" />
-              </div>
-              <h2 className="mb-6 text-3xl font-semibold tracking-[-0.04em] text-white sm:text-4xl md:text-5xl">
-                Let's Build the <br />
-                <span className="bg-gradient-to-r from-blue-300 to-violet-300 bg-clip-text text-transparent">Future</span> Together
-              </h2>
-              <p className="mb-8 text-base leading-8 text-slate-400 md:text-lg">
-                I'm always open to discussing cutting-edge AI research, potential collaborations, or exciting engineering opportunities.
-              </p>
-              
-              <div className="space-y-3">
-                <a href="mailto:anjaleesahu25@gmail.com" className="group flex min-w-0 items-center gap-4 rounded-xl border border-white/[0.06] bg-white/[0.025] p-3 transition-colors hover:border-blue-300/20">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-blue-300">
-                    @
-                  </div>
-                  <span className="break-all text-sm font-medium text-slate-300 transition-colors group-hover:text-white sm:text-base">anjaleesahu25@gmail.com</span>
-                </a>
-                <div className="flex items-center gap-4 rounded-xl border border-white/[0.06] bg-white/[0.025] p-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-violet-300">
-                    <span aria-hidden="true">⌖</span>
-                  </div>
-                  <span className="text-sm font-medium text-slate-300 sm:text-base">Indore, M.P., India</span>
-                </div>
+      <div className="contact-showcase">
+        <div className="contact-ambient contact-ambient-one" aria-hidden="true" />
+        <div className="contact-ambient contact-ambient-two" aria-hidden="true" />
+        <div className="contact-grid" aria-hidden="true" />
+
+        <div className="contact-showcase-content">
+          <motion.div
+            className="contact-intro"
+            initial={{ opacity: 0, y: 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-70px' }}
+            transition={{ duration: 0.55 }}
+          >
+            <span className="contact-eyebrow">GET IN TOUCH</span>
+            <h2>Let’s Turn <span>Ideas</span> into Reality</h2>
+            <p>
+              I'm always open to discussing cutting-edge AI research, potential collaborations, or exciting engineering opportunities.
+            </p>
+
+            <div className="contact-details">
+              <a href="mailto:anjaleesahu25@gmail.com" className="contact-detail-link">
+                <span className="contact-detail-icon"><Mail aria-hidden="true" /></span>
+                <span className="contact-detail-copy">
+                  <small>Email me</small>
+                  <strong>anjaleesahu25@gmail.com</strong>
+                </span>
+                <ArrowUpRight className="contact-detail-arrow" aria-hidden="true" />
+              </a>
+              <div className="contact-detail-location">
+                <span className="contact-detail-icon"><MapPin aria-hidden="true" /></span>
+                <span className="contact-detail-copy">
+                  <small>Location</small>
+                  <strong>Indore, M.P., India</strong>
+                </span>
               </div>
             </div>
+          </motion.div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <label htmlFor="contact-name" className="text-sm font-medium text-slate-300">Name</label>
+          <motion.div
+            className="contact-form-panel"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-70px' }}
+            transition={{ duration: 0.55, delay: 0.1 }}
+          >
+            <div className="contact-form-heading">
+              <span>START A CONVERSATION</span>
+              <p>Share a few details and send me a message.</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="contact-form">
+              <div className="contact-field-row">
+                <div className="contact-field">
+                  <label htmlFor="contact-name">Name</label>
                   <input
                     id="contact-name"
                     type="text"
@@ -229,16 +245,13 @@ export const Contact = () => {
                     value={form.name}
                     onChange={handleChange}
                     placeholder="John Doe"
-                    className={`w-full rounded-xl border bg-white/[0.035] px-4 py-3.5 text-white placeholder:text-slate-600 transition focus:outline-none focus:ring-2 focus:ring-violet-400/30 ${
-                      errors.name ? 'border-red-400/50 focus:ring-red-400/20' : 'border-white/[0.08] focus:border-violet-300/30'
-                    }`}
+                    aria-invalid={Boolean(errors.name)}
+                    className={errors.name ? 'has-error' : ''}
                   />
-                  {errors.name && (
-                    <span className="text-red-400 text-xs mt-1 block">{errors.name}</span>
-                  )}
+                  {errors.name && <span className="contact-field-error">{errors.name}</span>}
                 </div>
-                <div className="space-y-2">
-                  <label htmlFor="contact-email" className="text-sm font-medium text-slate-300">Email</label>
+                <div className="contact-field">
+                  <label htmlFor="contact-email">Email</label>
                   <input
                     id="contact-email"
                     type="email"
@@ -246,18 +259,15 @@ export const Contact = () => {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="john@example.com"
-                    className={`w-full rounded-xl border bg-white/[0.035] px-4 py-3.5 text-white placeholder:text-slate-600 transition focus:outline-none focus:ring-2 focus:ring-violet-400/30 ${
-                      errors.email ? 'border-red-400/50 focus:ring-red-400/20' : 'border-white/[0.08] focus:border-violet-300/30'
-                    }`}
+                    aria-invalid={Boolean(errors.email)}
+                    className={errors.email ? 'has-error' : ''}
                   />
-                  {errors.email && (
-                    <span className="text-red-400 text-xs mt-1 block">{errors.email}</span>
-                  )}
+                  {errors.email && <span className="contact-field-error">{errors.email}</span>}
                 </div>
               </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="contact-subject" className="text-sm font-medium text-slate-300">Subject</label>
+
+              <div className="contact-field">
+                <label htmlFor="contact-subject">Subject</label>
                 <input
                   id="contact-subject"
                   type="text"
@@ -265,17 +275,14 @@ export const Contact = () => {
                   value={form.subject}
                   onChange={handleChange}
                   placeholder="Opportunity: Lead AI Engineer"
-                  className={`w-full rounded-xl border bg-white/[0.035] px-4 py-3.5 text-white placeholder:text-slate-600 transition focus:outline-none focus:ring-2 focus:ring-violet-400/30 ${
-                    errors.subject ? 'border-red-400/50 focus:ring-red-400/20' : 'border-white/[0.08] focus:border-violet-300/30'
-                  }`}
+                  aria-invalid={Boolean(errors.subject)}
+                  className={errors.subject ? 'has-error' : ''}
                 />
-                {errors.subject && (
-                  <span className="text-red-400 text-xs mt-1 block">{errors.subject}</span>
-                )}
+                {errors.subject && <span className="contact-field-error">{errors.subject}</span>}
               </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="contact-message" className="text-sm font-medium text-slate-300">Message</label>
+
+              <div className="contact-field">
+                <label htmlFor="contact-message">Message</label>
                 <textarea
                   id="contact-message"
                   name="message"
@@ -283,36 +290,33 @@ export const Contact = () => {
                   onChange={handleChange}
                   rows={4}
                   placeholder="Tell me about your project..."
-                  className={`w-full resize-none rounded-xl border bg-white/[0.035] px-4 py-3.5 text-white placeholder:text-slate-600 transition focus:outline-none focus:ring-2 focus:ring-violet-400/30 ${
-                    errors.message ? 'border-red-400/50 focus:ring-red-400/20' : 'border-white/[0.08] focus:border-violet-300/30'
-                  }`}
+                  aria-invalid={Boolean(errors.message)}
+                  className={errors.message ? 'has-error' : ''}
                 />
-                {errors.message && (
-                  <span className="text-red-400 text-xs mt-1 block">{errors.message}</span>
-                )}
+                {errors.message && <span className="contact-field-error">{errors.message}</span>}
               </div>
-              
+
               <motion.button
-                whileHover={{ scale: isSending ? 1 : 1.02 }}
-                whileTap={{ scale: isSending ? 1 : 0.98 }}
+                whileHover={{ y: isSending ? 0 : -2 }}
+                whileTap={{ scale: isSending ? 1 : 0.99 }}
                 disabled={isSending}
-                className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-violet-500 px-8 py-4 font-semibold text-white shadow-lg shadow-violet-500/15 transition-all hover:shadow-violet-500/30 disabled:cursor-not-allowed disabled:opacity-50"
+                className="contact-submit"
                 type="submit"
               >
                 {isSending ? (
                   <>
                     Sending...
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <Loader2 className="contact-submit-icon animate-spin" />
                   </>
                 ) : (
                   <>
                     Send Message
-                    <Send className="w-5 h-5" />
+                    <Send className="contact-submit-icon" />
                   </>
                 )}
               </motion.button>
             </form>
-          </div>
+          </motion.div>
         </div>
       </div>
     </Section>
