@@ -8,6 +8,7 @@ const navLinks = [
   { name: 'Skills', href: '#skills' },
   { name: 'Projects', href: '#projects' },
   { name: 'Experience', href: '#experience' },
+  { name: 'Certificates', href: '#certificates' },
   { name: 'Contact', href: '#contact' },
 ];
 
@@ -31,16 +32,16 @@ export const Navbar = () => {
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled ? 'py-4 glass' : 'py-6 bg-transparent'
+        isScrolled ? 'border-b border-white/[0.06] bg-[#0a0b12]/85 py-3 backdrop-blur-2xl' : 'py-5 bg-transparent'
       )}
     >
       <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
         {/* Logo */}
         <a href="#" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-shadow">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-blue-400/20 to-violet-400/20 shadow-lg shadow-violet-500/10 transition-shadow group-hover:shadow-violet-500/25">
             <Terminal className="text-white w-5 h-5" />
           </div>
-          <span className="font-bold text-xl tracking-tight hidden sm:block">Nikita.</span>
+          <span className="font-bold text-xl tracking-tight hidden sm:block">Anjalee Sahu</span>
         </a>
 
         {/* Desktop Nav */}
@@ -61,7 +62,7 @@ export const Navbar = () => {
           <div className="flex items-center gap-4 border-l border-white/10 pl-4">
 
             <a 
-              href="/Nikita_Digodiya_Resume.pdf"
+              href="/anjalee_sahu_.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="blob-btn"
@@ -81,7 +82,9 @@ export const Navbar = () => {
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden p-2 text-gray-300"
+          aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={mobileMenuOpen}
+          className="rounded-lg border border-white/10 bg-white/[0.04] p-2 text-slate-300 transition-colors hover:bg-white/[0.08] md:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X /> : <Menu />}
@@ -94,9 +97,9 @@ export const Navbar = () => {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden glass border-t border-white/10 mt-4"
+          className="mt-4 border-t border-white/10 bg-[#0a0b12]/95 backdrop-blur-2xl md:hidden"
         >
-          <div className="flex flex-col p-6 gap-4">
+          <div className="flex flex-col gap-4 p-6">
             {navLinks.map((link) => (
               <a
                 key={link.name}
@@ -108,7 +111,7 @@ export const Navbar = () => {
               </a>
             ))}
             <a 
-              href="/Nikita_Digodiya_Resume.pdf"
+              href="/anjalee_sahu_.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="blob-btn w-full mt-4"

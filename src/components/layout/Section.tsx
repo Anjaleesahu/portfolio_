@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 
 interface SectionProps {
@@ -19,18 +19,9 @@ export const Section = ({
   className,
   containerClassName,
 }: SectionProps) => {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [30, -30]);
-
   return (
-    <section ref={ref} id={id} className={cn('py-16 relative overflow-hidden', className)}>
+    <section id={id} className={cn('relative overflow-hidden py-20 md:py-28', className)}>
       <motion.div 
-        style={{ y }}
         className={cn('container mx-auto px-6 md:px-12 relative z-10', containerClassName)}
       >
         {(title || subtitle) && (
@@ -39,15 +30,15 @@ export const Section = ({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
-            className="mb-16 md:mb-24"
+            className="mb-12 md:mb-16"
           >
             {title && (
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">
+              <h2 className="mb-4 text-3xl font-semibold tracking-[-0.04em] text-white sm:text-4xl md:text-5xl">
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="text-gray-400 text-lg max-w-2xl">
+              <p className="max-w-2xl text-base leading-7 text-slate-400 md:text-lg">
                 {subtitle}
               </p>
             )}

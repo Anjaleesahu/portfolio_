@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Section } from '../layout/Section';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Terminal, Loader2 } from 'lucide-react';
-import emailjs from '@emailjs/browser';
 
 interface FormState {
   name: string;
@@ -34,6 +33,7 @@ export const Contact = () => {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSending, setIsSending] = useState(false);
+  const sendingRef = useRef(false);
   const [toast, setToast] = useState<ToastState | null>(null);
 
   // Auto-close toast notifications after 5 seconds
@@ -52,7 +52,6 @@ export const Contact = () => {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
-
   const validate = (): boolean => {
     const tempErrors: FormErrors = {};
     let isValid = true;
@@ -84,53 +83,73 @@ export const Contact = () => {
     return isValid;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (sendingRef.current) return;
     if (!validate()) return;
 
-    setIsSending(true);
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
 
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-    if (!serviceId || !templateId || !publicKey) {
+    if (!accessKey) {
       setToast({
         message: 'Failed to send message.',
-        submessage: 'EmailJS environment variables are missing configuration.',
+        submessage: 'Web3Forms Access Key is missing. Check your .env file.',
         type: 'error',
       });
-      setIsSending(false);
       return;
     }
 
-    const templateParams = {
-      from_name: form.name,
-      reply_to: form.email,
-      subject: form.subject,
-      message: form.message,
-      to_email: 'nikitadigodiya31@gmail.com',
-    };
+    sendingRef.current = true;
+    setIsSending(true);
 
     try {
-      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: accessKey,
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+          from_name: 'Portfolio Contact Form',
+        }),
+      });
+      const result: unknown = await response.json();
+      const isResultObject = typeof result === 'object' && result !== null;
+      const success = isResultObject && 'success' in result && result.success === true;
+      const errorMessage = isResultObject && 'message' in result && typeof result.message === 'string'
+        ? result.message
+        : 'Unable to send your message. Please try again.';
+
+      if (!response.ok || !success) {
+        throw new Error(errorMessage);
+      }
+
       setToast({
-        message: 'Message sent successfully!',
-        submessage: "Thanks for reaching out. I'll get back to you soon.",
+        message: 'Submission accepted by Web3Forms.',
+        submessage: 'If it does not arrive shortly, check Spam/Promotions and confirm the access key is linked to the correct inbox.',
         type: 'success',
       });
       // Reset form fields
       setForm({ name: '', email: '', subject: '', message: '' });
       setErrors({});
     } catch (error) {
-      console.error('EmailJS error:', error);
+      console.error('Web3Forms error:', error);
       setToast({
         message: 'Failed to send message.',
-        submessage: 'Please try again later.',
+        submessage:
+          error instanceof Error
+            ? error.message
+            : 'Please check your internet connection and try again.',
         type: 'error',
       });
     } finally {
+      sendingRef.current = false;
       setIsSending(false);
     }
   };
@@ -144,10 +163,10 @@ export const Contact = () => {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className={`fixed bottom-8 right-8 z-50 p-6 rounded-2xl border backdrop-blur-md shadow-2xl max-w-sm flex flex-col gap-1 transition-all ${
+            className={`fixed bottom-5 left-5 right-5 z-50 flex max-w-sm flex-col gap-1 rounded-2xl border p-5 shadow-2xl backdrop-blur-xl transition-all sm:bottom-8 sm:left-auto sm:right-8 ${
               toast.type === 'success'
-                ? 'bg-black/90 border-green-500/30 text-white'
-                : 'bg-black/90 border-red-500/30 text-white'
+                ? 'border-green-400/25 bg-[#10111a]/95 text-white'
+                : 'border-red-400/25 bg-[#10111a]/95 text-white'
             }`}
           >
             <div className="flex items-center gap-2 font-bold">
@@ -165,54 +184,53 @@ export const Contact = () => {
         )}
       </AnimatePresence>
 
-      <div className="max-w-4xl mx-auto rounded-3xl overflow-hidden relative">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-black to-purple-900/20" />
-        <div className="absolute -top-[500px] left-1/2 -translate-x-1/2 w-[1000px] h-[1000px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/[0.08] bg-[#10111a] shadow-[0_30px_100px_rgba(0,0,0,0.28)]">
+        <div className="pointer-events-none absolute -right-28 -top-40 h-[28rem] w-[28rem] rounded-full bg-violet-500/[0.08] blur-[110px]" />
         
-        <div className="relative z-10 glass-card p-6 md:p-16 border-white/5 shadow-2xl">
-          <div className="grid md:grid-cols-2 gap-10 md:gap-16">
+        <div className="relative z-10 p-6 sm:p-9 md:p-12 lg:p-16">
+          <div className="grid gap-12 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
             
             <div>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-8 shadow-lg shadow-blue-500/20">
-                <Terminal className="text-white w-6 h-6" />
+              <div className="mb-7 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-violet-300/15 bg-violet-300/[0.08]">
+                <Terminal className="h-6 w-6 text-violet-200" />
               </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+              <h2 className="mb-6 text-3xl font-semibold tracking-[-0.04em] text-white sm:text-4xl md:text-5xl">
                 Let's Build the <br />
-                <span className="text-gradient">Future</span> Together
+                <span className="bg-gradient-to-r from-blue-300 to-violet-300 bg-clip-text text-transparent">Future</span> Together
               </h2>
-              <p className="text-gray-400 text-lg leading-relaxed mb-8">
+              <p className="mb-8 text-base leading-8 text-slate-400 md:text-lg">
                 I'm always open to discussing cutting-edge AI research, potential collaborations, or exciting engineering opportunities.
               </p>
               
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-blue-400 border border-white/10">
+              <div className="space-y-3">
+                <a href="mailto:anjaleesahu25@gmail.com" className="group flex min-w-0 items-center gap-4 rounded-xl border border-white/[0.06] bg-white/[0.025] p-3 transition-colors hover:border-blue-300/20">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-blue-300">
                     @
                   </div>
-                  <span className="text-gray-300 font-medium">nikitadigodiya31@gmail.com</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-purple-400 border border-white/10">
-                    📍
+                  <span className="break-all text-sm font-medium text-slate-300 transition-colors group-hover:text-white sm:text-base">anjaleesahu25@gmail.com</span>
+                </a>
+                <div className="flex items-center gap-4 rounded-xl border border-white/[0.06] bg-white/[0.025] p-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-violet-300">
+                    <span aria-hidden="true">⌖</span>
                   </div>
-                  <span className="text-gray-300 font-medium">Indore, M.P., India</span>
+                  <span className="text-sm font-medium text-slate-300 sm:text-base">Indore, M.P., India</span>
                 </div>
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <div className="grid grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-400">Name</label>
+                  <label htmlFor="contact-name" className="text-sm font-medium text-slate-300">Name</label>
                   <input
+                    id="contact-name"
                     type="text"
                     name="name"
                     value={form.name}
                     onChange={handleChange}
                     placeholder="John Doe"
-                    className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all ${
-                      errors.name ? 'border-red-500/50 focus:ring-red-500/30' : 'border-white/10'
+                    className={`w-full rounded-xl border bg-white/[0.035] px-4 py-3.5 text-white placeholder:text-slate-600 transition focus:outline-none focus:ring-2 focus:ring-violet-400/30 ${
+                      errors.name ? 'border-red-400/50 focus:ring-red-400/20' : 'border-white/[0.08] focus:border-violet-300/30'
                     }`}
                   />
                   {errors.name && (
@@ -220,15 +238,16 @@ export const Contact = () => {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-400">Email</label>
+                  <label htmlFor="contact-email" className="text-sm font-medium text-slate-300">Email</label>
                   <input
+                    id="contact-email"
                     type="email"
                     name="email"
                     value={form.email}
                     onChange={handleChange}
                     placeholder="john@example.com"
-                    className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all ${
-                      errors.email ? 'border-red-500/50 focus:ring-red-500/30' : 'border-white/10'
+                    className={`w-full rounded-xl border bg-white/[0.035] px-4 py-3.5 text-white placeholder:text-slate-600 transition focus:outline-none focus:ring-2 focus:ring-violet-400/30 ${
+                      errors.email ? 'border-red-400/50 focus:ring-red-400/20' : 'border-white/[0.08] focus:border-violet-300/30'
                     }`}
                   />
                   {errors.email && (
@@ -238,15 +257,16 @@ export const Contact = () => {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-400">Subject</label>
+                <label htmlFor="contact-subject" className="text-sm font-medium text-slate-300">Subject</label>
                 <input
+                  id="contact-subject"
                   type="text"
                   name="subject"
                   value={form.subject}
                   onChange={handleChange}
                   placeholder="Opportunity: Lead AI Engineer"
-                  className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all ${
-                    errors.subject ? 'border-red-500/50 focus:ring-red-500/30' : 'border-white/10'
+                  className={`w-full rounded-xl border bg-white/[0.035] px-4 py-3.5 text-white placeholder:text-slate-600 transition focus:outline-none focus:ring-2 focus:ring-violet-400/30 ${
+                    errors.subject ? 'border-red-400/50 focus:ring-red-400/20' : 'border-white/[0.08] focus:border-violet-300/30'
                   }`}
                 />
                 {errors.subject && (
@@ -255,15 +275,16 @@ export const Contact = () => {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-400">Message</label>
+                <label htmlFor="contact-message" className="text-sm font-medium text-slate-300">Message</label>
                 <textarea
+                  id="contact-message"
                   name="message"
                   value={form.message}
                   onChange={handleChange}
                   rows={4}
                   placeholder="Tell me about your project..."
-                  className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all resize-none ${
-                    errors.message ? 'border-red-500/50 focus:ring-red-500/30' : 'border-white/10'
+                  className={`w-full resize-none rounded-xl border bg-white/[0.035] px-4 py-3.5 text-white placeholder:text-slate-600 transition focus:outline-none focus:ring-2 focus:ring-violet-400/30 ${
+                    errors.message ? 'border-red-400/50 focus:ring-red-400/20' : 'border-white/[0.08] focus:border-violet-300/30'
                   }`}
                 />
                 {errors.message && (
@@ -275,7 +296,7 @@ export const Contact = () => {
                 whileHover={{ scale: isSending ? 1 : 1.02 }}
                 whileTap={{ scale: isSending ? 1 : 0.98 }}
                 disabled={isSending}
-                className="w-full mt-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white font-bold py-4 px-8 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-violet-500 px-8 py-4 font-semibold text-white shadow-lg shadow-violet-500/15 transition-all hover:shadow-violet-500/30 disabled:cursor-not-allowed disabled:opacity-50"
                 type="submit"
               >
                 {isSending ? (

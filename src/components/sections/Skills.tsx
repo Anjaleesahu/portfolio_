@@ -16,7 +16,7 @@ const skills = [
   {
     category: 'ML / AI',
     icon: <BrainCircuit className="w-5 h-5 text-purple-400" />,
-    items: ['Scikit-learn', 'TF-IDF', 'Logistic Regression', 'NLP', 'Text Classification', 'Sentiment Analysis', 'TensorFlow', 'PyTorch'],
+    items: ['Scikit-learn', 'Logistic Regression', 'PyTorch'],
     bgGlow: 'bg-purple-600/15',
     iconBg: 'bg-purple-500/10 border-purple-500/20',
     imageBg: '/ml-ai-bg.png',
@@ -34,7 +34,7 @@ const skills = [
   {
     category: 'Tools & Platforms',
     icon: <Cpu className="w-5 h-5 text-green-400" />,
-    items: ['Git', 'GitHub', 'Jupyter Notebook', 'Google Colab', 'VS Code'],
+    items: ['Git', 'GitHub', 'Jupyter Notebook', 'Google Colab', 'VS Code', 'Firebase', 'Arduino IDE'],
     bgGlow: 'bg-green-600/15',
     iconBg: 'bg-green-500/10 border-green-500/20',
     imageBg: '/tools-bg.png',
@@ -43,7 +43,7 @@ const skills = [
   {
     category: 'Frameworks & APIs',
     icon: <Network className="w-5 h-5 text-yellow-400" />,
-    items: ['Flask', 'FastAPI', 'REST APIs', 'Hugging Face Transformers'],
+    items: ['Flask', 'FastAPI', 'Django', 'REST APIs', 'Hugging Face Transformers'],
     bgGlow: 'bg-yellow-600/15',
     iconBg: 'bg-yellow-500/10 border-yellow-500/20',
     imageBg: '/frameworks-bg.png',
@@ -52,7 +52,7 @@ const skills = [
   {
     category: 'Databases',
     icon: <Database className="w-5 h-5 text-red-400" />,
-    items: ['SQL', 'SQLite'],
+    items: ['MySQL', 'MongoDB'],
     bgGlow: 'bg-red-600/15',
     iconBg: 'bg-red-500/10 border-red-500/20',
     imageBg: '/databases-bg.png',
@@ -90,21 +90,20 @@ export const Skills = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-50px' }}
-        className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mt-12 auto-rows-fr"
+        className="mt-12 grid auto-rows-fr gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3"
       >
         {skills.map((skill, index) => (
           <motion.div
             key={index}
             variants={itemVariants}
-            className="group h-full relative overflow-hidden rounded-2xl bg-[#111111] border border-white/5 p-6 hover:border-white/10 transition-colors duration-500"
+            className="group relative h-full overflow-hidden rounded-[1.5rem] border border-white/[0.07] bg-[#10111a] p-6 transition duration-500 hover:-translate-y-1 hover:border-violet-300/20 hover:bg-[#131521] md:p-7"
           >
-            {/* Soft Radial Gradient Background in top-right */}
-            <div className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[80px] pointer-events-none transition-colors duration-700 ${skill.bgGlow} group-hover:opacity-100 opacity-70 z-0`} />
+            <div className={`pointer-events-none absolute -right-24 -top-24 z-0 h-56 w-56 rounded-full opacity-70 blur-[85px] transition duration-700 group-hover:opacity-100 ${skill.bgGlow}`} />
             
             {/* Optional Image Background */}
             {skill.imageBg && (
               <div 
-                className="absolute inset-0 z-0 opacity-15 mix-blend-screen transition-transform duration-700 group-hover:scale-110 pointer-events-none"
+                className="pointer-events-none absolute inset-0 z-0 opacity-[0.08] mix-blend-screen transition-transform duration-700 group-hover:scale-105"
                 style={{
                   backgroundImage: `url(${skill.imageBg})`,
                   backgroundSize: skill.imageFit || 'cover',
@@ -115,15 +114,15 @@ export const Skills = () => {
             )}
             
             <div className="relative z-10">
-              <div className={`mb-6 p-3 rounded-xl border inline-flex items-center justify-center ${skill.iconBg}`}>
+              <div className={`mb-6 inline-flex items-center justify-center rounded-xl border p-3 ${skill.iconBg}`}>
                 {skill.icon}
               </div>
-              <h3 className="text-xl font-bold text-white mb-4 tracking-tight">{skill.category}</h3>
+              <h3 className="mb-4 text-xl font-semibold tracking-tight text-white">{skill.category}</h3>
               <div className="flex flex-wrap gap-2">
                 {skill.items.map((item, idx) => (
                   <span
                     key={idx}
-                    className="px-3 py-1.5 text-xs font-semibold text-gray-300 bg-white/5 rounded-md hover:bg-white/10 transition-colors cursor-default"
+                    className="cursor-default rounded-lg border border-white/[0.06] bg-white/[0.035] px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:border-violet-300/20 hover:bg-violet-300/[0.08] hover:text-white"
                   >
                     {item}
                   </span>

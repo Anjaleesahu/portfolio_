@@ -7,6 +7,7 @@ import { Skills } from './components/sections/Skills';
 import { InfiniteSkills } from './components/sections/InfiniteSkills';
 import { Projects } from './components/sections/Projects';
 import { Experience } from './components/sections/Experience';
+import { Certificates } from './components/sections/Certificates';
 import { Contact } from './components/sections/Contact';
 import { CustomCursor } from './components/ui/CustomCursor';
 
@@ -22,6 +23,7 @@ function App() {
         <Skills />
         <Projects />
         <Experience />
+        <Certificates />
         <Contact />
       </main>
       <Footer />

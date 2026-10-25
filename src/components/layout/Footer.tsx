@@ -4,9 +4,9 @@ export const Footer = () => {
   const currentYear = new Date().getFullYear();
   
   const socialLinks = [
-    { icon: <Code className="w-4 h-4 transition-colors duration-300" />, href: 'https://github.com/Nickyit', label: 'GitHub', hoverClass: 'hover:bg-[#333] hover:border-[#333]' },
-    { icon: <Briefcase className="w-4 h-4 transition-colors duration-300" />, href: 'https://linkedin.com/in/nikita-digodiya', label: 'LinkedIn', hoverClass: 'hover:bg-[#0077b5] hover:border-[#0077b5]' },
-    { icon: <Mail className="w-4 h-4 transition-colors duration-300" />, href: 'mailto:nikitadigodiya31@gmail.com', label: 'Email', hoverClass: 'hover:bg-[#dd4b39] hover:border-[#dd4b39]' },
+    { icon: <Code className="w-4 h-4 transition-colors duration-300" />, href: 'https://github.com/Anjaleesahu', label: 'GitHub', hoverClass: 'hover:bg-[#333] hover:border-[#333]' },
+    { icon: <Briefcase className="w-4 h-4 transition-colors duration-300" />, href: 'https://www.linkedin.com/in/anjalee-sahu-365b39334/', label: 'LinkedIn', hoverClass: 'hover:bg-[#0077b5] hover:border-[#0077b5]' },
+    { icon: <Mail className="w-4 h-4 transition-colors duration-300" />, href: 'mailto:anjaleesahu25@gmail.com', label: 'Email', hoverClass: 'hover:bg-[#dd4b39] hover:border-[#dd4b39]' },
   ];
 
   return (
@@ -21,7 +21,7 @@ export const Footer = () => {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
                 <Terminal className="text-white w-4 h-4" />
               </div>
-              <span className="font-bold text-lg tracking-tight">Nikita Digodiya</span>
+              <span className="font-bold text-lg tracking-tight">Anjalee Sahu</span>
             </a>
             <div className="flex items-center gap-2.5">
               {socialLinks.map((link, index) => (
@@ -40,7 +40,7 @@ export const Footer = () => {
           <div>
             <h3 className="font-semibold text-white text-xs uppercase tracking-wider mb-3">Navigation</h3>
             <ul className="flex flex-col gap-2">
-              {['About', 'Skills', 'Projects', 'Experience'].map((item) => (
+              {['About', 'Skills', 'Projects', 'Experience', 'Certificates', 'Contact'].map((item) => (
                 <li key={item}>
                   <a href={`#${item.toLowerCase()}`} className="text-gray-400 hover:text-white transition-colors text-xs">
                     {item}

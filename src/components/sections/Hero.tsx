@@ -1,75 +1,123 @@
-import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Preload } from '@react-three/drei';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
-import { AIFloatingObject } from '../3d/AIFloatingObject';
+import { ArrowDown, ArrowUpRight, Brain, Code2, Layers, Sparkles } from 'lucide-react';
 import { FaGithub, FaLinkedinIn } from 'react-icons/fa';
 import { SiLeetcode } from 'react-icons/si';
 
+const socials = [
+  {
+    href: 'https://www.linkedin.com/in/anjalee-sahu-365b39334/',
+    label: 'LinkedIn',
+    icon: <FaLinkedinIn />,
+  },
+  {
+    href: 'https://leetcode.com/u/_anjalee_sahu/',
+    label: 'LeetCode',
+    icon: <SiLeetcode />,
+  },
+  {
+    href: 'https://github.com/Anjaleesahu',
+    label: 'GitHub',
+    icon: <FaGithub />,
+  },
+];
+
 export const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background Gradient */}
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[150px] pointer-events-none" />
+    <section className="hero-surface relative isolate flex min-h-[min(900px,100svh)] items-center overflow-hidden pt-28 pb-20">
+      <div className="hero-grid pointer-events-none absolute inset-0 -z-10" />
+      <div className="hero-glow hero-glow-blue pointer-events-none absolute -left-40 top-24 -z-10" />
+      <div className="hero-glow hero-glow-violet pointer-events-none absolute -right-40 bottom-0 -z-10" />
 
-      {/* Full-Screen 3D Background */}
-      <div className="absolute inset-0 z-0 pointer-events-auto">
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-          <Suspense fallback={null}>
-            <AIFloatingObject />
-            <OrbitControls
-              enableZoom={false}
-              enablePan={false}
-              maxPolarAngle={Math.PI / 2 + 0.2}
-              minPolarAngle={Math.PI / 2 - 0.2}
-            />
-            <Preload all />
-          </Suspense>
-        </Canvas>
-      </div>
+      <div className="container mx-auto grid items-center gap-12 px-6 md:px-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="relative z-10 mx-auto w-full max-w-3xl text-center lg:mx-0 lg:text-left"
+        >
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/[0.06] px-4 py-2 text-sm text-slate-300">
+            <Sparkles className="h-4 w-4 text-blue-300" />
+            <span>Junior AI/ML Engineer | Python Developer</span>
+          </div>
 
-      <div className="container mx-auto px-6 md:px-12 flex items-center relative z-10 min-h-screen pointer-events-none">
-
-        {/* Text Content */}
-        <div className="flex flex-col gap-6 w-full max-w-4xl bg-black/40 backdrop-blur-md p-6 sm:p-8 lg:p-12 rounded-2xl border border-white/5 shadow-2xl pointer-events-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-          >
-            <span className="inline-block py-1 px-3 rounded-full glass border border-blue-500/30 text-blue-400 text-sm font-medium mb-6">
-              Junior AI/ML Engineer | Python Developer
+          <h1 className="mx-auto max-w-5xl text-5xl font-semibold leading-[1.03] tracking-[-0.055em] text-white sm:text-6xl md:text-7xl xl:text-[5.5rem] lg:mx-0">
+            Building the
+            <span className="mt-2 block bg-gradient-to-r from-blue-300 via-blue-200 to-sky-300 bg-clip-text text-transparent">
+              Intelligent Future
             </span>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight tracking-tighter mb-4">
-              Building the <br />
-              <span className="text-gradient">Intelligent Future</span>
-            </h1>
-            <p className="text-gray-400 text-base md:text-lg lg:text-xl leading-relaxed max-w-lg">
-              Python developer and Machine Learning engineer specializing in NLP pipelines, text classification models, and chatbot systems.
-            </p>
-          </motion.div>
+          </h1>
+          <p className="mx-auto mt-7 max-w-2xl text-base leading-8 text-slate-400 sm:text-lg lg:mx-0">
+            Aspiring Software Engineer skilled in Python and full-stack development, with hands-on experience in AI, machine learning, and IoT projects. Passionate about building smart, practical solutions using technology.
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-            className="flex flex-wrap items-center gap-6 mt-4"
-          >
-            <a href="https://www.linkedin.com/in/nikita-digodiya-67a93b303/" target="_blank" rel="noopener noreferrer" className="social-btn linkedin" aria-label="LinkedIn">
-              <FaLinkedinIn className="icon" />
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+            <a
+              href="#projects"
+              className="hero-primary-button inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-sky-500 px-6 py-3.5 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5"
+            >
+              Explore my work <ArrowDown className="h-4 w-4" />
             </a>
-            <a href="https://leetcode.com/u/nikita_digodiya/" target="_blank" rel="noopener noreferrer" className="social-btn leetcode" aria-label="LeetCode">
-              <SiLeetcode className="icon" />
+            <a
+              href="/anjalee_sahu_.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-6 py-3.5 text-sm font-semibold text-slate-200 transition duration-300 hover:border-blue-300/30 hover:bg-white/[0.07]"
+            >
+              View resume <ArrowUpRight className="h-4 w-4" />
             </a>
-            <a href="https://github.com/Nickyit" target="_blank" rel="noopener noreferrer" className="social-btn github" aria-label="GitHub">
-              <FaGithub className="icon" />
-            </a>
-          </motion.div>
-        </div>
+          </div>
+
+          <div className="mt-10 flex items-center justify-center gap-3 lg:justify-start">
+            <span className="mr-1 text-xs font-medium uppercase tracking-[0.18em] text-slate-500">Find me on</span>
+            {socials.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.label}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.035] text-slate-300 transition duration-300 hover:-translate-y-1 hover:border-blue-300/30 hover:bg-blue-400/10 hover:text-white"
+              >
+                {social.icon}
+              </a>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 16 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.12, ease: 'easeOut' }}
+          className="relative mx-auto w-full max-w-[420px] lg:mr-2"
+        >
+          <div className="hero-photo-glow pointer-events-none absolute -inset-6 rounded-[2.5rem] blur-3xl" />
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#10111a] p-2.5 shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-slate-900">
+              <img
+                src="/port_img.png"
+                alt="Anjalee Sahu - Profile Photo"
+                className="h-full w-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#080b11]/70 via-transparent to-transparent" />
+            </div>
+          </div>
+          <div className="absolute -bottom-5 left-4 z-10 flex flex-col gap-3 rounded-2xl border border-white/10 bg-[#10141b]/95 p-4 shadow-2xl backdrop-blur-xl sm:-left-6 sm:p-5">
+            <div className="flex items-center gap-2.5 text-sm font-medium text-slate-200">
+              <Code2 className="h-4 w-4 text-blue-300" />
+              Python Development
+            </div>
+            <div className="flex items-center gap-2.5 text-sm font-medium text-slate-200">
+              <Layers className="h-4 w-4 text-blue-300" />
+              Full-Stack Development
+            </div>
+            <div className="flex items-center gap-2.5 text-sm font-medium text-slate-200">
+              <Brain className="h-4 w-4 text-blue-300" />
+              AI/ML
+            </div>
+          </div>
+        </motion.div>
       </div>
-
     </section>
   );
 };
